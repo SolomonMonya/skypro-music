@@ -3,19 +3,16 @@
 import styles from "./Filters.module.css";
 import FilterItem from "./FilterItem/FilterItem";
 import { useState } from "react";
-import { trackType } from "@/app/auxiliary/types";
+import { Track } from "@/app/auxiliary/types";
 
-type TrackType = {
-  tracksData: trackType[];
+type filterTracks = {
+  track: Track
 }
 
+export default function Filters({track}: filterTracks) {
 
-
-export default function Filters({tracksData}: TrackType) {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
-
-    const authorArr = tracksData.map((trackData) => (trackData.author));
-    const filteredAuthorArr: string[] = [];
+    const filteredAuthorArr: Object[] = [];
+    const authorArr = track.map((trackData: any) => (trackData.author));
     for (const value of authorArr) {
         let exists = false;
         for (const unique of filteredAuthorArr) { 
@@ -29,8 +26,8 @@ export default function Filters({tracksData}: TrackType) {
         }
     }
 
-    const genreArr = tracksData.map((trackData) => (trackData.genre));
-    const filteredGenreArr: string[] = [];
+    const genreArr = track.map((trackData: any) => (trackData.genre));
+    const filteredGenreArr: Object[] = [];
     for (const value of genreArr) {
         let exists = false;
         for (const unique of filteredGenreArr) { 
@@ -58,6 +55,8 @@ export default function Filters({tracksData}: TrackType) {
       list: filteredGenreArr,
     },
   ];
+  
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   function handleFilterClick(newFilter: string) {
     setActiveFilter((prev) => (prev === newFilter ? null : newFilter));

@@ -1,14 +1,16 @@
 import { getTracks } from "@/api/api";
-import Track from "../Track/Track"
+import TrackBox from "../Track/Track"
 import styles from "./Plaulist.module.css";
 import classNames from "classnames";
-import { trackType } from "@/app/auxiliary/types";
+import { Track } from "@/app/auxiliary/types";
+import { useEffect, useState } from "react";
 
 type TrackType = {
-  playlist: trackType[]; 
+  setTracksData: (param: Track) => void;
+  tracksData: Track
 }
 
-export default async function Playlist ({playlist}: TrackType) {
+export default function Playlist ({tracksData, setTracksData}: TrackType) {
 
   return (
     <div className={styles.centerblockContent}>
@@ -29,12 +31,15 @@ export default async function Playlist ({playlist}: TrackType) {
           </div>
         </div>
         <div className={styles.contentPlaylist}>
-          {playlist.map((playlistItem) => (
-            <Track key={playlistItem.id}
+          {tracksData.map((playlistItem: any) => (
+            <TrackBox 
+            onClick={() => setTracksData(playlistItem)}
+            key={playlistItem.id}
             name={playlistItem.name}
             author={playlistItem.author}
             album={playlistItem.album}
-            />
+            duration={playlistItem.duration_in_seconds}
+          />
           ))}
         </div>
       </div>

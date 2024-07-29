@@ -1,3 +1,5 @@
+import { ChangeEvent } from "react";
+
 export type User = {
   id: number;
   username: string;
@@ -6,7 +8,8 @@ export type User = {
   email: string;
 } 
 
-export type trackType = {
+export type Track = {
+  map: any;
   id: number;
   name: string;
   author: string;
@@ -16,21 +19,24 @@ export type trackType = {
   album: string;
   logo: string | null;
   track_file: string;
-  stared_user: User[];
+  stared_user: User;
   isPlaying: boolean;
+  setCurrentTrack: (track: any) => void;
   onClick: () => void;
+}
+
+export type PlayerControlsType = {
+  togglePlay: () => void;
+  isPlaying: boolean;
+  toggleLoop: () => void;
+  isLooping: boolean;
+  track: Track;
 };
 
-export type Tracks = {
-  isLoading?: boolean;
-  setCurrentTrack: (track: any) => void;
-  tracks: Array<{
-    id: number;
-    name: string;
-    author: string;
-    album: string;
-    genre: string
-    duration_in_seconds: number;
-    isLiked: boolean;
-  }>;
-};
+export type VolumeType = {
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}

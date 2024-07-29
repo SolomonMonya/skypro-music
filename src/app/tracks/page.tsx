@@ -1,41 +1,30 @@
+"use client";
+
 import styles from "./page.module.css";
-import Bar from "@/components/Bar/Bar";
-import Sidebar from "@/components/Sidebar/Sidebar";
-import Nav from "@/components/Navigation/Navigation";
-import Search from "@/components/Search/Search";
-import Filters from "@/components/Filters/Filters";
-import Playlist from "@/components/Playlist/Playlist";
-import { useEffect, useState } from "react";
-import { trackType } from "@/app/auxiliary/types";
+import Main from "@/app/main";
+import { Track } from "@/app/auxiliary/types";
 import { getTracks } from "@/api/api";
+import { useEffect, useState } from "react";
 
+export default function Home() {
 
-export default async function Home() {
+  const [tracksList, setTracksList] = useState<Track | null>(null);
+  
+  useEffect(() => {
+    getTracks()
+      .then((data) => {
+        setTracksList(data);
+      })
+      .catch((error) => {
+        new Error(error.message);
+      });
+  }, [setTracksList]);
 
-  let tracksData: trackType[];
- 
-  try {
-    tracksData = await getTracks();
-  } catch (error:any) {
-    throw new Error(error.message);
-  }
+  if (!tracksList || !setTracksList) return;
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <Nav />
-          <div className={styles.mainCenterblock}>
-            <Search />
-            <h2 className={styles.centerblockH2}>Треки</h2>
-            <Filters tracksData={tracksData} />
-            <Playlist playlist={tracksData} />
-          </div>
-          <Sidebar />
-        </main>
-        <Bar /> 
-        <footer className="footer" />
-      </div>
+      <Main tracks={tracksList} setTracks={setTracksList}/>
     </div>
-  );
-}
+  )
+};

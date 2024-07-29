@@ -1,14 +1,17 @@
 import styles from "./Track.module.css";
+import { durationFormat } from "@/app/auxiliary/durationFormat";
 
 type TrackType = {
   name: string;
   author: string; 
-  album: string; 
+  album: string;
+  duration: number;
+  onClick: () => void; 
 }
  
-export default function Track({name, author, album}: TrackType) {
+export default function TrackBox({name, author, album, onClick, duration}: TrackType) {
   return (
-    <div className={styles.playlistItem}>
+    <div onClick={onClick} className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
@@ -36,7 +39,9 @@ export default function Track({name, author, album}: TrackType) {
           <svg className={styles.trackTimeSvg}>
             <use xlinkHref="img/icon/sprite.svg#icon-like" />
           </svg>
-          <span className={styles.trackTimeText}>4:44</span>
+          <span className={styles.trackTimeText}>
+            {durationFormat(duration)}
+          </span>
         </div>
       </div>
     </div>
