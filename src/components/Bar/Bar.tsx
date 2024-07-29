@@ -7,14 +7,23 @@ import ProgressBar from "./ProgressBar/ProgressBar";
 import VolumeBar from "./VolumeBar/VolumeBar";
 import PlayerBar from "./PlayerBar/PlayerBar";
 import { durationFormat } from "@/app/auxiliary/durationFormat";
+import { useAppDispatch, useAppSelector } from "@/app/auxiliary/hooks";
+import { setIsPlaying, setNextTrack } from "@/app/auxiliary/store/features/PlaylistSlice";
+import PlayerTrackPlay from "./PlayingTrack/PlayingTrack";
+import PlayingTrack from "./PlayingTrack/PlayingTrack";
 
 type BarTracks = { 
   tracks: Track
 }
 
 export default function Bar({ tracks }: BarTracks) {
+
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
+  const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
+ 
+  const dispatch = useAppDispatch();
+
   const [currentTime, setCurrentTime] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [volume, setVolume] = useState<number>(0.5);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const audioRef = useRef<null | HTMLAudioElement>(null);
@@ -22,13 +31,30 @@ export default function Bar({ tracks }: BarTracks) {
   const duration = audioRef.current?.duration || 0;
 
   useEffect(() => {
+    if (isPlaying) {
+      audioRef.current?.play();
+    }
+  }, [isPlaying, currentTrack]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    const handdleEnded = () => {
+      dispatch(setNextTrack());
+    };
+
+    audio?.addEventListener("ended", handdleEnded);
+
+    return () => audio?.removeEventListener("ended", handdleEnded);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, audioRef.current]);
+
+  useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
       audioRef.current.play();
-      setIsPlaying(true);
     }
     audioRef.current?.addEventListener("ended", () => {
-      setIsPlaying(false);
+  
       setCurrentTime(0);
     });
   }, [volume, duration]);
@@ -37,10 +63,12 @@ export default function Bar({ tracks }: BarTracks) {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        dispatch(setIsPlaying(false));
       } else {
         audioRef.current.play();
+        dispatch(setIsPlaying(true));
       }
-      setIsPlaying(!isPlaying);
+  
     }
   };
 
@@ -69,7 +97,7 @@ export default function Bar({ tracks }: BarTracks) {
     }
   };
 
-  if (!tracks) return;
+  if (!currentTrack) return
 
   return (
     <div className={styles.bar}>
@@ -91,6 +119,7 @@ export default function Bar({ tracks }: BarTracks) {
           onChange={handleSeek}
         />
         <div className={styles.barPlayerBlock}>
+          <div className={styles.barPlayer}>
           <PlayerBar
             togglePlay={togglePlay}
             isPlaying={isPlaying}
@@ -98,6 +127,9 @@ export default function Bar({ tracks }: BarTracks) {
             isLooping={isLooping}
             track={tracks}
           />
+          <PlayingTrack track={currentTrack} />
+          </div>
+
           <VolumeBar
             min={0}
             max={1}

@@ -1,22 +1,38 @@
+import { useAppSelector, useAppDispatch } from "@/app/auxiliary/hooks";
 import styles from "./Track.module.css";
 import { durationFormat } from "@/app/auxiliary/durationFormat";
+import { setCurrentTrack, setIsPlaying } from "@/app/auxiliary/store/features/PlaylistSlice";
+import { Track } from "@/app/auxiliary/types";
+import classNames from "classnames";
 
 type TrackType = {
-  name: string;
-  author: string; 
-  album: string;
-  duration: number;
-  onClick: () => void; 
+  track: Track;
+  tracksData: Track[];
 }
  
-export default function TrackBox({name, author, album, onClick, duration}: TrackType) {
+export default function TrackBox({track, tracksData }: TrackType) {
+
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
+  const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
+  const dispatch = useAppDispatch();
+  const { name, author, album, duration_in_seconds, id } = track;
+  const isCurrentTrack = currentTrack ? currentTrack.id === id : false;
+
+  const HandleTrackClick = () => {
+    dispatch(setCurrentTrack({ track, tracksData }));
+    dispatch(setIsPlaying(true));
+  };
   return (
-    <div onClick={onClick} className={styles.playlistItem}>
+    <div onClick={HandleTrackClick} className={styles.playlistItem}>
       <div className={styles.playlistTrack}>
         <div className={styles.trackTitle}>
           <div className={styles.trackTitleImage}>
-            <svg className={styles.trackTitleSvg}>
-              <use xlinkHref="img/icon/sprite.svg#icon-note" />
+            <svg className={classNames(styles.trackTitleSvg, {
+                [styles.trackIconIsplaying]: isPlaying && isCurrentTrack,
+              })}>
+              <use xlinkHref={`img/icon/sprite.svg#${
+                  isCurrentTrack ? "icon-isplaying" : "icon-note"
+                }`} />
             </svg>
           </div>
           <div className="track__title-text">
@@ -40,7 +56,7 @@ export default function TrackBox({name, author, album, onClick, duration}: Track
             <use xlinkHref="img/icon/sprite.svg#icon-like" />
           </svg>
           <span className={styles.trackTimeText}>
-            {durationFormat(duration)}
+            {durationFormat(duration_in_seconds)}
           </span>
         </div>
       </div>

@@ -1,9 +1,10 @@
-const apiUrlGetTracks = "https://skypro-music-api.skyeng.tech/catalog/track/all/";
+const apiUrlGetTracks = `https://webdev-music-003b5b991590.herokuapp.com/catalog/track/all/`;
 
 export async function getTracks() {
   const res = await fetch(apiUrlGetTracks);
 
   if (!res.ok) {
+    console.log(res.ok)
     throw new Error("Ошибка при получении данных");
   }
 

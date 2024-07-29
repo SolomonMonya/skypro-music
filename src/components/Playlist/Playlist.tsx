@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 type TrackType = {
   setTracksData: (param: Track) => void;
-  tracksData: Track
+  tracksData: Track[]
 }
 
 export default function Playlist ({tracksData, setTracksData}: TrackType) {
@@ -33,12 +33,8 @@ export default function Playlist ({tracksData, setTracksData}: TrackType) {
         <div className={styles.contentPlaylist}>
           {tracksData.map((playlistItem: any) => (
             <TrackBox 
-            onClick={() => setTracksData(playlistItem)}
-            key={playlistItem.id}
-            name={playlistItem.name}
-            author={playlistItem.author}
-            album={playlistItem.album}
-            duration={playlistItem.duration_in_seconds}
+            key={playlistItem.id} track={playlistItem} tracksData={tracksData}
+
           />
           ))}
         </div>
