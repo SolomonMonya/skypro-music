@@ -1,65 +1,39 @@
 import styles from "./page.module.css";
-import Track from "@/components/Track/Track";
 import Bar from "@/components/Bar/Bar";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Nav from "@/components/Navigation/Navigation";
 import Search from "@/components/Search/Search";
-import classnames from "classnames";
+import Filters from "@/components/Filters/Filters";
+import Playlist from "@/components/Playlist/Playlist";
+import { useEffect, useState } from "react";
+import { trackType } from "@/app/auxiliary/types";
+import { getTracks } from "@/api/api";
 
-export default function Home() {
+
+export default async function Home() {
+
+  let tracksData: trackType[];
+ 
+  try {
+    tracksData = await getTracks();
+  } catch (error:any) {
+    throw new Error(error.message);
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
         <main className={styles.main}>
-          <Nav></Nav>
+          <Nav />
           <div className={styles.mainCenterblock}>
-            <Search></Search>
+            <Search />
             <h2 className={styles.centerblockH2}>Треки</h2>
-            <div className={styles.centerblockFilter}>
-              <div className={styles.filterTitle}>Искать по:</div>
-              <div className={classnames(styles.filterButton, styles.BtnText)}>
-                исполнителю
-              </div>
-              <div className={classnames(styles.filterButton, styles.BtnText)}>
-                году выпуска
-              </div>
-              <div className={classnames(styles.filterButton, styles.BtnText)}>
-                жанру
-              </div>
-            </div>
-            <div className={styles.centerblockContent}>
-              <div className={styles.contentTitle}>
-                <div
-                  className={classnames(styles.playlistTitleCol, styles.col01)}
-                >
-                  Трек
-                </div>
-                <div
-                  className={classnames(styles.playlistTitleCol, styles.col02)}
-                >
-                  Исполнитель
-                </div>
-                <div
-                  className={classnames(styles.playlistTitleCol, styles.col03)}
-                >
-                  Альбом
-                </div>
-                <div
-                  className={classnames(styles.playlistTitleCol, styles.col04)}
-                >
-                  <svg className={styles.playlistTitleSvg}>
-                    <use xlinkHref="img/icon/sprite.svg#icon-watch" />
-                  </svg>
-                </div>
-              </div>
-              <div className={styles.contentPlaylist}>
-                <Track></Track>
-              </div>
-            </div>
+            <Filters tracksData={tracksData} />
+            <Playlist playlist={tracksData} />
           </div>
-          <Sidebar></Sidebar>
+          <Sidebar />
         </main>
-        <Bar></Bar>
+        <Bar /> 
         <footer className="footer" />
       </div>
     </div>
