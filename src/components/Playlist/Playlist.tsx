@@ -1,18 +1,17 @@
-import TrackBox from "../Track/Track"
 import styles from "./Playlist.module.css";
 import classNames from "classnames";
+import TrackBox from "../Track/Track";
 import { Track } from "@/app/Utilities/types";
 
 type TrackType = {
   tracksData: Track[];
-  setCurrentTrack: (param: Track | null) => void;
-  setCurrentIndex: (param: number | null) => void;
+  setCurrentTrack: (track: Track | null, index: number | null) => void;
 };
 
-export default function Playlist({ tracksData, setCurrentTrack, setCurrentIndex}: TrackType) {
+export default function Playlist({ tracksData, setCurrentTrack }: TrackType) {
   const handleTrackClick = (playlistItem: Track, index: number) => {
-    setCurrentTrack(playlistItem);
-    setCurrentIndex(index)
+    console.log(playlistItem, index)
+    setCurrentTrack(playlistItem, index);
   };
 
   return (
@@ -38,7 +37,7 @@ export default function Playlist({ tracksData, setCurrentTrack, setCurrentIndex}
           <TrackBox
             onClick={() => handleTrackClick(playlistItem, index)}
             currentTrack={playlistItem}
-            key={`${playlistItem} + ${index}`}
+            key={`${playlistItem.id}-${index}`}
           />
         ))}
       </div>

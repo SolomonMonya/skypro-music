@@ -9,6 +9,7 @@ import Filters from "@/components/Filters/Filters";
 import Playlist from "@/components/Playlist/Playlist";
 import { Track } from "@/app/Utilities/types";
 import { useState } from "react";
+
 type MainTrackCheck = {
   tracks: Track[];
   setTracks: (tracks: Track[]) => void;
@@ -20,7 +21,10 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
   if (currentIndex === null) return
   const [currentTrack, setCurrentTrack] = useState<Track | null>(tracks[currentIndex]);
 
-
+  const handleTrackChange = (track: Track | null, index: number | null) => {
+    setCurrentTrack(track);
+    setCurrentIndex(index);
+  };
 
   return (
     <div className={styles.container}>
@@ -30,11 +34,20 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
           <Search />
           <h2 className={styles.centerblockH2}>Треки</h2>
           <Filters track={tracks} setFilteredTracks={setFilteredTracks} />
-          <Playlist tracksData={filteredTracks} setCurrentTrack={setCurrentTrack} setCurrentIndex={setCurrentIndex} />
+          <Playlist
+            tracksData={filteredTracks}
+            setCurrentTrack={handleTrackChange}
+          />
         </div>
         <Sidebar />
       </main>
-      {filteredTracks && <Bar tracksData={filteredTracks}  track={currentTrack} index={currentIndex} />}
+      {filteredTracks && (
+        <Bar
+          tracksData={filteredTracks}
+          track={currentTrack}
+          index={currentIndex}
+        />
+      )}
       <footer className="footer" />
     </div>
   );

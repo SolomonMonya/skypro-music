@@ -10,31 +10,43 @@ import Volume from "./VolumeBar/VolumeBar";
 
 type BarType = {
   tracksData: Track[];
-  index: number | null
-  track: Track | null
+  index: number | null;
+  track: Track | null;
 };
 
 export default function Bar({ tracksData, track, index }: BarType) {
-  if (index === null || track === null) return
-  const [currentTrack, setCurrentTrack] = useState<Track>(track);
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(track);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [volume, setVolume] = useState<number>(100);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (track !== currentTrack) {
+      setCurrentTrack(track);
+    }
+  }, [track]);
+
   const duration = audioRef.current?.duration || 0;
 
   const togglePlay = () => setIsPlaying(!isPlaying);
   const toggleLoop = () => setIsLooping(!isLooping);
+
   const nextTrack = () => {
-    const currentIndex = tracksData.indexOf(currentTrack);
-    const nextIndex = currentIndex < tracksData.length - 1 ? currentIndex + 1 : 0;
-    setCurrentTrack(tracksData[nextIndex]);
+    if (currentTrack) {
+      const currentIndex = tracksData.indexOf(currentTrack);
+      const nextIndex = currentIndex < tracksData.length - 1 ? currentIndex + 1 : 0;
+      setCurrentTrack(tracksData[nextIndex]);
+    }
   };
+
   const prevTrack = () => {
-    const currentIndex = tracksData.indexOf(currentTrack);
-    const prevIndex = currentIndex > 0 ? currentIndex - 1 : tracksData.length - 1;
-    setCurrentTrack(tracksData[prevIndex]);
+    if (currentTrack) {
+      const currentIndex = tracksData.indexOf(currentTrack);
+      const prevIndex = currentIndex > 0 ? currentIndex - 1 : tracksData.length - 1;
+      setCurrentTrack(tracksData[prevIndex]);
+    }
   };
 
   useEffect(() => {
@@ -57,11 +69,11 @@ export default function Bar({ tracksData, track, index }: BarType) {
     const audio = audioRef.current;
     if (audio) {
       const handleTimeUpdate = () => {
-        setProgress((audio.currentTime / audio.duration) * 100);
+        setProgress((audio.currentTime / audio.duration) * 100 || 0);
       };
-      audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener("timeupdate", handleTimeUpdate);
       return () => {
-        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener("timeupdate", handleTimeUpdate);
       };
     }
   }, []);
@@ -78,9 +90,13 @@ export default function Bar({ tracksData, track, index }: BarType) {
     const newProgress = parseInt(e.target.value, 10);
     setProgress(newProgress);
     if (audioRef.current) {
-      audioRef.current.currentTime = (newProgress / 100) * audioRef.current.duration;
+      audioRef.current.currentTime = (newProgress / 100) * (audioRef.current.duration || 0);
     }
   };
+
+  if (!currentTrack) {
+    return null;
+  }
 
   return (
     <div className={styles.bar}>
