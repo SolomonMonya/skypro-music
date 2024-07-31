@@ -1,23 +1,16 @@
 import classNames from "classnames";
 import styles from "./Track.module.css";
+import { Track } from "@/app/Utilities/types";
 
-type TrackBoxType = {
-  name: string;
-  author: string;
-  album: string;
-  duration_in_seconds: number;
-  onClick: () => void;
+type TrackBoxProps = {
+  currentTrack: Track | null;
+  onClick: () => void
 };
 
-export default function TrackBox({
-  name,
-  author,
-  album,
-  duration_in_seconds,
-  onClick,
-}: TrackBoxType) {
-  const minutes = Math.floor(duration_in_seconds / 60);
-  const seconds = duration_in_seconds % 60;
+export default function TrackBox({ currentTrack, onClick }: TrackBoxProps) {
+  if (!currentTrack) return null;
+  const minutes = Math.floor(currentTrack.duration_in_seconds / 60);
+  const seconds = currentTrack.duration_in_seconds % 60;
 
   return (
     <div className={styles.playlistItem} onClick={onClick}>
@@ -30,19 +23,19 @@ export default function TrackBox({
           </div>
           <div className={styles.trackTitleText}>
             <a className={styles.trackTitleLink} href="#">
-              {name}
+              {currentTrack.name}
               <span className={styles.trackTitleSpan} />
             </a>
           </div>
         </div>
         <div className={classNames(styles.trackAuthor, styles.author)}>
           <a className={styles.trackAuthorLink} href="#">
-            {author}
+            {currentTrack.author}
           </a>
         </div>
         <div className={classNames(styles.trackAlbum, styles.album)}>
           <a className={styles.trackAlbumLink} href="#">
-            {album}
+            {currentTrack.album}
           </a>
         </div>
         <div className={classNames(styles.trackTime, styles.time)}>

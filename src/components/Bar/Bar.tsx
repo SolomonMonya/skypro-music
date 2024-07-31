@@ -10,10 +10,13 @@ import Volume from "./VolumeBar/VolumeBar";
 
 type BarType = {
   tracksData: Track[];
+  index: number | null
+  track: Track | null
 };
 
-export default function Bar({ tracksData }: BarType) {
-  const [currentTrack, setCurrentTrack] = useState<Track>(tracksData[0]);
+export default function Bar({ tracksData, track, index }: BarType) {
+  if (index === null || track === null) return
+  const [currentTrack, setCurrentTrack] = useState<Track>(track);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
@@ -93,7 +96,7 @@ export default function Bar({ tracksData }: BarType) {
           <div>{durationFormat(progress)}</div>
           &nbsp; / &nbsp;
           <div>{durationFormat(duration)}</div>
-        </div>        
+        </div>
         <div className={styles.barPlayerBlock}>
           <PlayerBar
             togglePlay={togglePlay}

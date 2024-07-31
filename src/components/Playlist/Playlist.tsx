@@ -4,13 +4,15 @@ import classNames from "classnames";
 import { Track } from "@/app/Utilities/types";
 
 type TrackType = {
-  setTracksData: (param: Track[]) => void;
   tracksData: Track[];
+  setCurrentTrack: (param: Track | null) => void;
+  setCurrentIndex: (param: number | null) => void;
 };
 
-export default function Playlist({ tracksData, setTracksData }: TrackType) {
-  const handleTrackClick = (playlistItem: Track) => {
-    setTracksData([playlistItem]);
+export default function Playlist({ tracksData, setCurrentTrack, setCurrentIndex}: TrackType) {
+  const handleTrackClick = (playlistItem: Track, index: number) => {
+    setCurrentTrack(playlistItem);
+    setCurrentIndex(index)
   };
 
   return (
@@ -32,14 +34,11 @@ export default function Playlist({ tracksData, setTracksData }: TrackType) {
         </div>
       </div>
       <div className={styles.contentPlaylist}>
-        {tracksData.map((playlistItem) => (
+        {tracksData.map((playlistItem, index) => (
           <TrackBox
-            onClick={() => handleTrackClick(playlistItem)}
-            key={playlistItem.id}
-            name={playlistItem.name}
-            author={playlistItem.author}
-            album={playlistItem.album}
-            duration_in_seconds={playlistItem.duration_in_seconds}
+            onClick={() => handleTrackClick(playlistItem, index)}
+            currentTrack={playlistItem}
+            key={`${playlistItem} + ${index}`}
           />
         ))}
       </div>

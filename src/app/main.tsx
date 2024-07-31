@@ -16,6 +16,11 @@ type MainTrackCheck = {
 
 export default function Main({ tracks, setTracks }: MainTrackCheck) {
   const [filteredTracks, setFilteredTracks] = useState<Track[]>(tracks);
+  const [currentIndex, setCurrentIndex] = useState<number | null>(0);
+  if (currentIndex === null) return
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(tracks[currentIndex]);
+
+
 
   return (
     <div className={styles.container}>
@@ -25,11 +30,11 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
           <Search />
           <h2 className={styles.centerblockH2}>Треки</h2>
           <Filters track={tracks} setFilteredTracks={setFilteredTracks} />
-          <Playlist tracksData={filteredTracks} setTracksData={setTracks} />
+          <Playlist tracksData={filteredTracks} setCurrentTrack={setCurrentTrack} setCurrentIndex={setCurrentIndex} />
         </div>
         <Sidebar />
       </main>
-      {filteredTracks && <Bar tracksData={filteredTracks} />}
+      {filteredTracks && <Bar tracksData={filteredTracks}  track={currentTrack} index={currentIndex} />}
       <footer className="footer" />
     </div>
   );
