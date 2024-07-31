@@ -2,10 +2,10 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import styles from "./Bar.module.css";
-import { Track } from "@/app/auxiliary/types";
+import { Track } from "@/app/Utilities/types";
 import ProgressBar from "./ProgressBar/ProgressBar";
-import {PlayerBar} from "./PlayerBar/PlayerBar";
-import { durationFormat } from "@/app/auxiliary/durationFormat";
+import { PlayerBar } from "./PlayerBar/PlayerBar";
+import { durationFormat } from "@/app/Utilities/durationFormat";
 import Volume from "./VolumeBar/VolumeBar";
 
 type BarType = {
@@ -81,35 +81,38 @@ export default function Bar({ tracksData }: BarType) {
 
   return (
     <div className={styles.bar}>
-      <audio ref={audioRef} src={currentTrack.track_file} />
       <div className={styles.barContent}>
-        {/* <TrackPlay
-          name={currentTrack.name}
-          author={currentTrack.author}
-          album={currentTrack.album}
-          logo={currentTrack.logo}
-        /> */}
-        <ProgressBar 
+        <audio ref={audioRef} src={currentTrack.track_file} />
+        <ProgressBar
           max={duration}
           value={progress}
           step={0.01}
           onChange={handleProgressChange}
         />
-        <PlayerBar
-          togglePlay={togglePlay}
-          isPlaying={isPlaying}
-          toggleLoop={toggleLoop}
-          isLooping={isLooping}
-          nextTrack={nextTrack}
-          prevTrack={prevTrack}
-        />
-        <Volume
-          min={0}
-          max={100}
-          step={1}
-          value={volume}
-          onChange={handleVolumeChange}
-        />
+        <div className={styles.trackTimeBlock}>
+          <div>{durationFormat(progress)}</div>
+          &nbsp; / &nbsp;
+          <div>{durationFormat(duration)}</div>
+        </div>        
+        <div className={styles.barPlayerBlock}>
+          <PlayerBar
+            togglePlay={togglePlay}
+            isPlaying={isPlaying}
+            toggleLoop={toggleLoop}
+            isLooping={isLooping}
+            nextTrack={nextTrack}
+            prevTrack={prevTrack}
+            trackName={currentTrack.name}
+            trackAuthor={currentTrack.author}
+          />
+          <Volume
+            min={0}
+            max={100}
+            step={1}
+            value={volume}
+            onChange={handleVolumeChange}
+          />
+        </div>
       </div>
     </div>
   );

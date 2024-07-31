@@ -6,16 +6,17 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import Nav from "@/components/Navigation/Navigation";
 import Search from "@/components/Search/Search";
 import Filters from "@/components/Filters/Filters";
-import {Playlist} from "@/components/Playlist/Playlist";
-import { Track } from "@/app/auxiliary/types";
+import Playlist from "@/components/Playlist/Playlist";
+import { Track } from "@/app/Utilities/types";
 import { useState } from "react";
-
 type MainTrackCheck = {
   tracks: Track[];
   setTracks: (tracks: Track[]) => void;
 };
 
 export default function Main({ tracks, setTracks }: MainTrackCheck) {
+  const [filteredTracks, setFilteredTracks] = useState<Track[]>(tracks);
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -23,12 +24,12 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
         <div className={styles.mainCenterblock}>
           <Search />
           <h2 className={styles.centerblockH2}>Треки</h2>
-          <Filters track={tracks} />
-          <Playlist tracksData={tracks} setTracksData={setTracks} />
+          <Filters track={tracks} setFilteredTracks={setFilteredTracks} />
+          <Playlist tracksData={filteredTracks} setTracksData={setTracks} />
         </div>
         <Sidebar />
       </main>
-      {tracks && <Bar tracksData={tracks} />}
+      {filteredTracks && <Bar tracksData={filteredTracks} />}
       <footer className="footer" />
     </div>
   );

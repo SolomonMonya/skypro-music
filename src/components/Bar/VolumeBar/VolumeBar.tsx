@@ -1,11 +1,11 @@
-import { VolumeType } from "@/app/auxiliary/types";
+import { VolumeType } from "@/app/Utilities/types";
 import styles from "./VolumeBar.module.css";
 import classNames from "classnames";
 
 export default function Volume({ min, max, step, value, onChange }: VolumeType) {
 
   return (
-    <div className={styles.barPlayerVolume}>
+    <div className={styles.barVolumeBlock}>
       <div className={styles.volumeContent}>
         <div className={styles.volumeImage}>
           <svg className={styles.volumeSvg}>
@@ -14,7 +14,7 @@ export default function Volume({ min, max, step, value, onChange }: VolumeType) 
         </div>
         <div className={styles.volumeProgress}>
           <input
-            className={styles.volumeLine}
+            className={styles.volumeProgressLine}
             type="range"
             min={min}
             max={max}

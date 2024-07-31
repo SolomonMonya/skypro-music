@@ -1,16 +1,14 @@
-import { getTracks } from "@/api/api";
 import TrackBox from "../Track/Track"
-import styles from "./Plaulist.module.css";
+import styles from "./Playlist.module.css";
 import classNames from "classnames";
-import { Track } from "@/app/auxiliary/types";
-import { useEffect, useState } from "react";
+import { Track } from "@/app/Utilities/types";
 
 type TrackType = {
   setTracksData: (param: Track[]) => void;
   tracksData: Track[];
 };
 
-export function Playlist({ tracksData, setTracksData }: TrackType) {
+export default function Playlist({ tracksData, setTracksData }: TrackType) {
   const handleTrackClick = (playlistItem: Track) => {
     setTracksData([playlistItem]);
   };

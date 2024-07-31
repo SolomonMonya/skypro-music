@@ -8,6 +8,8 @@ type PlayerControlsType = {
   isLooping: boolean;
   nextTrack: () => void;
   prevTrack: () => void;
+  trackName: string;
+  trackAuthor: string;
 };
 
 export function PlayerBar({
@@ -17,11 +19,13 @@ export function PlayerBar({
   isLooping,
   nextTrack,
   prevTrack,
+  trackName,
+  trackAuthor,
 }: PlayerControlsType) {
   return (
     <div className={styles.playerBar}>
       <div className={styles.playerControls}>
-        <div className={styles.playerBtnPrev} onClick={prevTrack}>
+        <div className={styles.playerBtnPrev}>
           <svg className={styles.playerBtnPrevSvg}>
             <use xlinkHref="img/icon/sprite.svg#icon-prev" />
           </svg>
@@ -35,7 +39,7 @@ export function PlayerBar({
             />
           </svg>
         </div>
-        <div className={styles.playerBtnNext} onClick={nextTrack}>
+        <div className={styles.playerBtnNext}>
           <svg className={styles.playerBtnNextSvg}>
             <use xlinkHref="img/icon/sprite.svg#icon-next" />
           </svg>
@@ -55,6 +59,35 @@ export function PlayerBar({
           </svg>
         </div>
       </div>
+      <div className={styles.playerTrackPlay}>
+        <div className={styles.trackPlayContain}>
+          <div className={styles.trackPlayImage}>
+            <svg className={styles.trackPlaySvg}>
+              <use xlinkHref="img/icon/sprite.svg#icon-note" />
+            </svg>
+          </div>
+          <div className={styles.trackPlayAuthor}>
+            <span className={styles.trackPlayAuthorLink}>{trackName}</span>
+          </div>
+          <div className={styles.trackPlayAlbum}>
+            <span className={styles.trackPlayAlbumLink}>{trackAuthor}</span>
+          </div>
+        </div>
+        <div className={styles.trackPlayLikeDis}>
+          <div className={classNames(styles.trackPlayLike, styles.btnIcon)}>
+            <svg className={styles.trackPlayLikeSvg}>
+              <use xlinkHref="img/icon/sprite.svg#icon-like" />
+            </svg>
+          </div>
+          <div className={classNames(styles.trackPlayDislike, styles.btnIcon)}>
+            <svg className={styles.trackPlayDislikeSvg}>
+              <use xlinkHref="img/icon/sprite.svg#icon-dislike" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
     </div>
+
   );
 }

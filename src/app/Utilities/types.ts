@@ -7,21 +7,17 @@ export type User = {
   last_name: string;
   email: string;
 };
-
 export type Track = {
   id: number;
   name: string;
   author: string;
-  release_date: string;
-  genre: string;
-  duration_in_seconds: number;
   album: string;
-  logo: string | null;
+  logo: { type: string; data: any[] };
   track_file: string;
-  stared_user: User;
-  isPlaying: boolean;
-  setCurrentTrack: (track: any) => void;
-  onClick: () => void;
+  duration_in_seconds: number;
+  genre: string[];
+  release_date: string;
+  staredUser: number[];
 };
 
 export type Tracks = {

@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import styles from "./Track.module.css";
-import { durationFormat } from "@/app/auxiliary/durationFormat";
 
 type TrackBoxType = {
   name: string;
@@ -21,10 +20,10 @@ export default function TrackBox({
   const seconds = duration_in_seconds % 60;
 
   return (
-    <div className={styles.playlistItem}>
+    <div className={styles.playlistItem} onClick={onClick}>
       <div className={styles.playlistTrack}>
         <div className={classNames(styles.trackTitle, styles.title)}>
-          <div onClick={onClick} className={styles.trackTitleImage}>
+          <div className={styles.trackTitleImage}>
             <svg className={styles.trackTitleSvg}>
               <use xlinkHref="img/icon/sprite.svg#icon-note" />
             </svg>

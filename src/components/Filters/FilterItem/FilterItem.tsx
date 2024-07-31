@@ -1,4 +1,3 @@
-import classnames from "classnames";
 import styles from "./FilterItem.module.css";
 import classNames from "classnames";
 
@@ -7,9 +6,10 @@ type FilterItemType = {
   list: string[];
   handleFilterClick: (newFilter: string) => void;
   isOpened: boolean;
+  onSelect: (value: string | null) => void;
 };
 
-export function FilterItem({ isOpened, handleFilterClick, title, list }: FilterItemType) {
+export function FilterItem({ isOpened, handleFilterClick, title, list, onSelect }: FilterItemType) {
   return (
     <div className={styles.wrapper}>
       <div
@@ -24,8 +24,11 @@ export function FilterItem({ isOpened, handleFilterClick, title, list }: FilterI
         <div className={styles.activeFilterContainer}>
           <ul className={styles.activeFilter}>
             {list.map((item) => (
-              <li key={item}>{item}</li>
+              <li key={item} onClick={() => onSelect(item)}>
+                {item}
+              </li>
             ))}
+            <li onClick={() => onSelect(null)}>Сбросить</li>
           </ul>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import Main from "@/app/main";
-import { Track } from "@/app/auxiliary/types";
+import { Track } from "@/app/Utilities/types";
 import { getTracks } from "@/api/api";
 import { useEffect, useState } from "react";
 
