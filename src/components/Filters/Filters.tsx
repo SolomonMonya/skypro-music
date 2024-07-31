@@ -1,62 +1,45 @@
 "use client";
 
 import styles from "./Filters.module.css";
-import FilterItem from "./FilterItem/FilterItem";
-import { useState } from "react";
-import { Track } from "@/app/auxiliary/types";
+import { FilterItem } from "./FilterItem/FilterItem";
+import { useEffect, useState } from "react";
+import { Tracks, Track } from "@/app/auxiliary/types";
 
-type filterTracks = {
-  track: Track
-}
+type FilterTracksProps = {
+  track: Track[];
+};
 
-export default function Filters({track}: filterTracks) {
+export default function Filters({ track }: FilterTracksProps) {
+  const [filteredAuthorArr, setFilteredAuthorArr] = useState<string[]>([]);
+  const [filteredGenreArr, setFilteredGenreArr] = useState<string[]>([]);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
-    const filteredAuthorArr: Object[] = [];
-    const authorArr = track.map((trackData: any) => (trackData.author));
-    for (const value of authorArr) {
-        let exists = false;
-        for (const unique of filteredAuthorArr) { 
-            if (unique === value) {
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) { 
-          filteredAuthorArr.push(value); 
-        }
+  useEffect(() => {
+    if (track) {
+      const authors = track.map((trackData) => trackData.author);
+      const uniqueAuthors = Array.from(new Set(authors));
+      setFilteredAuthorArr(uniqueAuthors);
+
+      const genres = track.map((trackData) => trackData.genre);
+      const uniqueGenres = Array.from(new Set(genres));
+      setFilteredGenreArr(uniqueGenres);
     }
-
-    const genreArr = track.map((trackData: any) => (trackData.genre));
-    const filteredGenreArr: Object[] = [];
-    for (const value of genreArr) {
-        let exists = false;
-        for (const unique of filteredGenreArr) { 
-            if (unique === value) {
-                exists = true;
-                break;
-            }
-        }
-        if (!exists) { 
-          filteredGenreArr.push(value); 
-        }
-    }
+  }, [track]);
 
   const filters = [
     {
-      title: "Исполнителю",
+      title: 'Исполнителю',
       list: filteredAuthorArr,
     },
     {
-      title: "Году выпуска",
-      list: ["сначала новые", "сначала старые", "по умолчанию"],
+      title: 'Году выпуска',
+      list: ['сначала новые', 'сначала старые', 'по умолчанию'],
     },
     {
-      title: "Жанру",
+      title: 'Жанру',
       list: filteredGenreArr,
     },
   ];
-  
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   function handleFilterClick(newFilter: string) {
     setActiveFilter((prev) => (prev === newFilter ? null : newFilter));
@@ -67,7 +50,7 @@ export default function Filters({track}: filterTracks) {
       <div className={styles.filterTitle}>Искать по:</div>
       {filters.map((filter) => (
         <FilterItem
-          isOpened={activeFilter === filter.title ? true : false}
+          isOpened={activeFilter === filter.title}
           handleFilterClick={handleFilterClick}
           title={filter.title}
           list={filter.list}

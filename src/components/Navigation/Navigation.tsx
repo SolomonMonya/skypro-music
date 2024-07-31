@@ -26,7 +26,7 @@ export default function Nav() {
         <span className={styles.burgerLine} />
         <span className={styles.burgerLine} />
       </div>
-      {isOpened ? (
+      {isOpened && (
         <div className={styles.navMenu}>
           <ul className={styles.menuList}>
             <li className={styles.menuItem}>
@@ -46,7 +46,7 @@ export default function Nav() {
             </li>
           </ul>
         </div>
-      ) : null}
+      )}
     </nav>
   );
 }

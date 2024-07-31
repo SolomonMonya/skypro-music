@@ -4,108 +4,112 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import styles from "./Bar.module.css";
 import { Track } from "@/app/auxiliary/types";
 import ProgressBar from "./ProgressBar/ProgressBar";
-import VolumeBar from "./VolumeBar/VolumeBar";
-import PlayerBar from "./PlayerBar/PlayerBar";
+import {PlayerBar} from "./PlayerBar/PlayerBar";
 import { durationFormat } from "@/app/auxiliary/durationFormat";
+import Volume from "./VolumeBar/VolumeBar";
 
-type BarTracks = { 
-  tracks: Track
-}
+type BarType = {
+  tracksData: Track[];
+};
 
-export default function Bar({ tracks }: BarTracks) {
-  const [currentTime, setCurrentTime] = useState<number>(0);
+export default function Bar({ tracksData }: BarType) {
+  const [currentTrack, setCurrentTrack] = useState<Track>(tracksData[0]);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [volume, setVolume] = useState<number>(0.5);
   const [isLooping, setIsLooping] = useState<boolean>(false);
-  const audioRef = useRef<null | HTMLAudioElement>(null);
-
+  const [progress, setProgress] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(100);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const duration = audioRef.current?.duration || 0;
+
+  const togglePlay = () => setIsPlaying(!isPlaying);
+  const toggleLoop = () => setIsLooping(!isLooping);
+  const nextTrack = () => {
+    const currentIndex = tracksData.indexOf(currentTrack);
+    const nextIndex = currentIndex < tracksData.length - 1 ? currentIndex + 1 : 0;
+    setCurrentTrack(tracksData[nextIndex]);
+  };
+  const prevTrack = () => {
+    const currentIndex = tracksData.indexOf(currentTrack);
+    const prevIndex = currentIndex > 0 ? currentIndex - 1 : tracksData.length - 1;
+    setCurrentTrack(tracksData[prevIndex]);
+  };
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = volume;
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-    audioRef.current?.addEventListener("ended", () => {
-      setIsPlaying(false);
-      setCurrentTime(0);
-    });
-  }, [volume, duration]);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.pause();
-      } else {
         audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const toggleLoop = () => {
-    if (audioRef.current) {
-      if (isLooping) {
-        audioRef.current.loop = false;
       } else {
-        audioRef.current.loop = true;
+        audioRef.current.pause();
       }
     }
-    setIsLooping((prev) => !prev);
-  };
+  }, [isPlaying]);
 
-  const handleSeek = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
     if (audioRef.current) {
-      setCurrentTime(Number(event.target.value));
-      audioRef.current.currentTime = Number(event.target.value);
+      audioRef.current.loop = isLooping;
+    }
+  }, [isLooping]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const handleTimeUpdate = () => {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      };
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      return () => {
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+      };
+    }
+  }, []);
+
+  const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseInt(e.target.value, 10);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume / 100;
     }
   };
 
-  const handleVolume = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newProgress = parseInt(e.target.value, 10);
+    setProgress(newProgress);
     if (audioRef.current) {
-      audioRef.current.volume = Number(event.target.value);
-      setVolume(audioRef.current.volume);
+      audioRef.current.currentTime = (newProgress / 100) * audioRef.current.duration;
     }
   };
-
-  if (!tracks) return;
 
   return (
     <div className={styles.bar}>
+      <audio ref={audioRef} src={currentTrack.track_file} />
       <div className={styles.barContent}>
-        <audio
-          ref={audioRef}
-          src={tracks.track_file}
-          onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
-        ></audio>
-        <div className={styles.trackTimeBlock}>
-          <div>{durationFormat(currentTime)}</div>
-          &nbsp; / &nbsp;
-          <div>{durationFormat(duration)}</div>
-        </div>
-        <ProgressBar
+        {/* <TrackPlay
+          name={currentTrack.name}
+          author={currentTrack.author}
+          album={currentTrack.album}
+          logo={currentTrack.logo}
+        /> */}
+        <ProgressBar 
           max={duration}
-          value={currentTime}
+          value={progress}
           step={0.01}
-          onChange={handleSeek}
+          onChange={handleProgressChange}
         />
-        <div className={styles.barPlayerBlock}>
-          <PlayerBar
-            togglePlay={togglePlay}
-            isPlaying={isPlaying}
-            toggleLoop={toggleLoop}
-            isLooping={isLooping}
-            track={tracks}
-          />
-          <VolumeBar
-            min={0}
-            max={1}
-            step={0.01}
-            value={volume}
-            onChange={handleVolume}
-          />
-        </div>
+        <PlayerBar
+          togglePlay={togglePlay}
+          isPlaying={isPlaying}
+          toggleLoop={toggleLoop}
+          isLooping={isLooping}
+          nextTrack={nextTrack}
+          prevTrack={prevTrack}
+        />
+        <Volume
+          min={0}
+          max={100}
+          step={1}
+          value={volume}
+          onChange={handleVolumeChange}
+        />
       </div>
     </div>
   );

@@ -6,25 +6,24 @@ import { Track } from "@/app/auxiliary/types";
 import { getTracks } from "@/api/api";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export function Home() {
+  const [tracksList, setTracksList] = useState<Track[] | null>(null);
 
-  const [tracksList, setTracksList] = useState<Track | null>(null);
-  
   useEffect(() => {
     getTracks()
       .then((data) => {
         setTracksList(data);
       })
       .catch((error) => {
-        new Error(error.message);
+        console.error(error.message);
       });
-  }, [setTracksList]);
+  }, []);
 
-  if (!tracksList || !setTracksList) return;
+  if (!tracksList) return null;
 
   return (
     <div className={styles.wrapper}>
-      <Main tracks={tracksList} setTracks={setTracksList}/>
+      <Main tracks={tracksList} setTracks={setTracksList} />
     </div>
-  )
-};
+  );
+}

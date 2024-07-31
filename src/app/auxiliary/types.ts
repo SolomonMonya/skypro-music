@@ -6,10 +6,9 @@ export type User = {
   first_name: string;
   last_name: string;
   email: string;
-} 
+};
 
 export type Track = {
-  map: any;
   id: number;
   name: string;
   author: string;
@@ -23,14 +22,40 @@ export type Track = {
   isPlaying: boolean;
   setCurrentTrack: (track: any) => void;
   onClick: () => void;
-}
+};
+
+export type Tracks = {
+  isLoading?: boolean;
+  setCurrentTrack: (track: any) => void;
+  tracks: Array<{
+    id: number;
+    name: string;
+    author: string;
+    album: string;
+    genre: string;
+    duration_in_seconds: number;
+    isLiked: boolean;
+    track_file: string;
+  }>;
+};
+
+export type SimplifiedTrack = {
+  id: number;
+  name: string;
+  author: string;
+  album: string;
+  genre: string;
+  duration_in_seconds: number;
+  isLiked: boolean;
+  track_file: string;
+};
 
 export type PlayerControlsType = {
   togglePlay: () => void;
   isPlaying: boolean;
   toggleLoop: () => void;
   isLooping: boolean;
-  track: Track;
+  track: SimplifiedTrack; // Changed to simplified track
 };
 
 export type VolumeType = {
@@ -39,4 +64,4 @@ export type VolumeType = {
   step: number;
   value: number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+};
