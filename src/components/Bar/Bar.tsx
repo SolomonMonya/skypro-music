@@ -65,19 +65,6 @@ export default function Bar({ tracksData, track, index }: BarType) {
     }
   }, [isLooping]);
 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const handleTimeUpdate = () => {
-        setProgress((audio.currentTime / audio.duration) * 100 || 0);
-      };
-      audio.addEventListener("timeupdate", handleTimeUpdate);
-      return () => {
-        audio.removeEventListener("timeupdate", handleTimeUpdate);
-      };
-    }
-  }, []);
-
   const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(e.target.value, 10);
     setVolume(newVolume);
@@ -86,12 +73,12 @@ export default function Bar({ tracksData, track, index }: BarType) {
     }
   };
 
-  const handleProgressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newProgress = parseInt(e.target.value, 10);
-    setProgress(newProgress);
-    if (audioRef.current) {
-      audioRef.current.currentTime = (newProgress / 100) * (audioRef.current.duration || 0);
+  const handleSeek = (event: ChangeEvent<HTMLInputElement> ) => {
+
+    if (audioRef.current) {    
+      audioRef.current.currentTime = Number(event.target.value);
     }
+
   };
 
   if (!currentTrack) {
@@ -101,18 +88,24 @@ export default function Bar({ tracksData, track, index }: BarType) {
   return (
     <div className={styles.bar}>
       <div className={styles.barContent}>
-        <audio ref={audioRef} src={currentTrack.track_file} />
-        <ProgressBar
-          max={duration}
-          value={progress}
-          step={0.01}
-          onChange={handleProgressChange}
-        />
-        <div className={styles.trackTimeBlock}>
-          <div>{durationFormat(progress)}</div>
-          &nbsp; / &nbsp;
-          <div>{durationFormat(duration)}</div>
+        <div className={styles.playerBar}>
+          <audio ref={audioRef} src={currentTrack.track_file} onTimeUpdate={(e) => {
+            setProgress(e.currentTarget.currentTime);
+          }}/>
+          <ProgressBar
+            max={duration}
+            value={progress}
+            step={0.01}
+            onChange={handleSeek}
+          />
+          <div className={styles.trackTimeBlock}>
+            <div>{durationFormat(progress)}</div>
+            &nbsp; / &nbsp;
+            <div>{durationFormat(duration)}</div>
+          </div>
         </div>
+
+
         <div className={styles.barPlayerBlock}>
           <PlayerBar
             togglePlay={togglePlay}

@@ -58,6 +58,7 @@
   --progress-bg-color: #2e2e2e;
 
   margin: 0;
+  margin-bottom: 10px;
   width: 100%;
   height: var(--progress-height);
   appearance: none;

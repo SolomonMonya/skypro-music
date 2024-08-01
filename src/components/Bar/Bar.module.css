@@ -16,6 +16,12 @@
   flex-direction: column;
 }
 
+.playerBar {
+
+  display: flex;
+
+}
+
 .barPlayerProgress {
   width: 100%;
   height: 5px;

@@ -87,9 +87,8 @@
 }
 
 .playerBtnRepeatSvg {
-  width: 18px;
+  width: 40px;
   height: 12px;
-  fill: transparent;
   
 }
 
@@ -200,7 +199,7 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: 26%;
+  margin-left: 31px;
 }
 
 .trackPlayLike,

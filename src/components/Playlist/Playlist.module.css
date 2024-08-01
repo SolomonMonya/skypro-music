@@ -70,5 +70,7 @@
   flex-direction: column;
   overflow-y: auto;
     -webkit-scrollbar: vertical;
-  scrollbar-width: thin;
+}
+.contentPlaylist::-webkit-scrollbar {
+  display: none; 
 }
