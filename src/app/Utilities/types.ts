@@ -20,21 +20,6 @@ export type Track = {
   staredUser: number[];
 };
 
-export type Tracks = {
-  isLoading?: boolean;
-  setCurrentTrack: (track: any) => void;
-  tracks: Array<{
-    id: number;
-    name: string;
-    author: string;
-    album: string;
-    genre: string;
-    duration_in_seconds: number;
-    isLiked: boolean;
-    track_file: string;
-  }>;
-};
-
 export type SimplifiedTrack = {
   id: number;
   name: string;
