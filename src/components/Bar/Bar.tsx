@@ -57,7 +57,7 @@ export default function Bar({ tracksData, track, index }: BarType) {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack]);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -80,6 +80,12 @@ export default function Bar({ tracksData, track, index }: BarType) {
     }
 
   };
+
+  useEffect(() => {
+    if (currentTrack) {
+      setIsPlaying(true)   
+    }
+  }, [track]);
 
   if (!currentTrack) {
     return null;
