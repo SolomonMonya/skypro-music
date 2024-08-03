@@ -17,8 +17,7 @@ export default function TrackBox({track}: TrackType) {
   const isCurrentTrack = currentTrack ? currentTrack.id === id : false;
 
   const handleTrackClick = () => {
-    dispatch(setCurrentTrack({ track }));
-    dispatch(setIsPlaying(true));
+    dispatch(setCurrentTrack(track));
   };
   return (
     <div className={styles.playlistItem} onClick={handleTrackClick}>

@@ -5,14 +5,19 @@ import Main from "@/app/main";
 import { Track } from "@/app/utilities/types";
 import { getTracks } from "@/api/api";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "../utilities/hooks";
+import { setCurrentPlaylist } from "../utilities/store/features/playlistSlice";
 
 export default function Home() {
   const [tracksList, setTracksList] = useState<Track[] | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getTracks()
       .then((data) => {
         setTracksList(data);
+        dispatch(setCurrentPlaylist(data));
+
       })
       .catch((error) => {
         console.error(error.message);

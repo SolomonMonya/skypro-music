@@ -16,6 +16,7 @@ export default function Bar() {
   const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
   const isLooping = useAppSelector((state) => state.playlist.loop);
   const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
+
   useEffect(() => {
     if (isPlaying) {
       audioRef.current?.play()
@@ -28,10 +29,7 @@ export default function Bar() {
 
   const [progress, setProgress] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const HandleNextTrack = () => {
-    debugger
-    dispatch(setNextTrack());
-  };
+
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -54,14 +52,20 @@ export default function Bar() {
 
   useEffect(() => {
     const audio = audioRef.current;
-
+    const HandleNextTrack = () => {
+        
+      if (!currentTrack) {
+        return null;
+      }
+      dispatch(setNextTrack());
+    };
     if (audio) {
       audio.addEventListener("ended", HandleNextTrack);
     }
     return () => {
       audio?.removeEventListener("ended", HandleNextTrack);
     };
-  }, [audioRef.current]);
+  }, [audioRef, dispatch]);
 
   const duration = audioRef.current?.duration || 0;
 
@@ -76,9 +80,6 @@ export default function Bar() {
   if (!currentTrack) {
     return null;
   }
-
-  console.log(audioRef.current)
-
 
   return (
     <div className={styles.bar}>

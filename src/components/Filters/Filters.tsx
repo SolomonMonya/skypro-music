@@ -4,6 +4,8 @@ import styles from "./Filters.module.css";
 import { FilterItem } from "./FilterItem/FilterItem";
 import { useEffect, useState } from "react";
 import { Track } from "@/app/utilities/types";
+import { useAppDispatch } from "@/app/utilities/hooks";
+import { setCurrentPlaylist } from "@/app/utilities/store/features/playlistSlice";
 
 type FilterTracksProps = {
   track: Track[];
@@ -17,6 +19,7 @@ export default function Filters({ track, setFilteredTracks }: FilterTracksProps)
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (track) {
@@ -80,7 +83,7 @@ export default function Filters({ track, setFilteredTracks }: FilterTracksProps)
       });
     }
 
-    setFilteredTracks(filteredTracks);
+    dispatch(setCurrentPlaylist(filteredTracks));
   }
 
   return (

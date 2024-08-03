@@ -16,25 +16,35 @@ type PlayerControlsType = {
 };
 
 const PlayerBar: React.FC<PlayerControlsType> = ({
-  currentTrack,
+
   isPlaying,
   isLooping,
   isShuffle,
 }) => {
 
-  const dispatch = useAppDispatch();
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
 
   if (!currentTrack) {
     return null;
   }
+  
+  const dispatch = useAppDispatch();
+
+  const handleNextTrack = () => {
+    dispatch(setNextTrack());
+  };
+
+  const handlePrevTrack = () => {
+    dispatch(setPreviousTrack());
+  };
+
+
   const { name, author } = currentTrack;
 
   return (
     <div className={styles.playerBar}>
       <div className={styles.playerControls}>
-        <div onClick={() => {
-          dispatch(setPreviousTrack());
-        }} className={styles.playerBtnPrev}>
+        <div onClick={handlePrevTrack} className={styles.playerBtnPrev}>
           <svg className={styles.playerBtnPrevSvg}>
             <use xlinkHref="img/icon/sprite.svg#icon-prev" />
           </svg>
@@ -48,8 +58,8 @@ const PlayerBar: React.FC<PlayerControlsType> = ({
             />
           </svg>
         </div>
-        <div 
-          onClick={() => dispatch(setNextTrack())} 
+        <div
+          onClick={handleNextTrack} 
           className={styles.playerBtnNext}>
           <svg className={styles.playerBtnNextSvg}>
             <use xlinkHref="img/icon/sprite.svg#icon-next" />
