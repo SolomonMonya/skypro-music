@@ -51,7 +51,7 @@ export type PlayerControlsType = {
   isPlaying: boolean;
   toggleLoop: () => void;
   isLooping: boolean;
-  track: SimplifiedTrack; // Changed to simplified track
+  tracks: Track[]; // Changed to simplified track
 };
 
 export type VolumeType = {

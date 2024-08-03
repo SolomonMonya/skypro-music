@@ -1,18 +1,13 @@
 import styles from "./Playlist.module.css";
 import classNames from "classnames";
 import TrackBox from "../Track/Track";
-import { Track } from "@/app/Utilities/types";
+import { Track } from "@/app/utilities/types";
 
 type TrackType = {
   tracksData: Track[];
-  setCurrentTrack: (track: Track | null, index: number | null) => void;
 };
 
-export default function Playlist({ tracksData, setCurrentTrack }: TrackType) {
-  const handleTrackClick = (playlistItem: Track, index: number) => {
-    console.log(playlistItem, index)
-    setCurrentTrack(playlistItem, index);
-  };
+export default function Playlist({ tracksData }: TrackType) {
 
   return (
     <div className={styles.centerblockContent}>
@@ -35,9 +30,8 @@ export default function Playlist({ tracksData, setCurrentTrack }: TrackType) {
       <div className={styles.contentPlaylist}>
         {tracksData.map((playlistItem, index) => (
           <TrackBox
-            onClick={() => handleTrackClick(playlistItem, index)}
-            currentTrack={playlistItem}
-            key={`${playlistItem.id}-${index}`}
+            track={playlistItem}            
+            key={index}
           />
         ))}
       </div>

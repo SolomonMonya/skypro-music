@@ -3,7 +3,7 @@
 import styles from "./Filters.module.css";
 import { FilterItem } from "./FilterItem/FilterItem";
 import { useEffect, useState } from "react";
-import { Track } from "@/app/Utilities/types";
+import { Track } from "@/app/utilities/types";
 
 type FilterTracksProps = {
   track: Track[];

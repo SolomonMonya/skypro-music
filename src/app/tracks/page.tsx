@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import Main from "@/app/main";
-import { Track } from "@/app/Utilities/types";
+import { Track } from "@/app/utilities/types";
 import { getTracks } from "@/api/api";
 import { useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div className={styles.wrapper}>
-      <Main tracks={tracksList} setTracks={setTracksList} />
+      <Main tracks={tracksList}/>
     </div>
   );
 }

@@ -1,41 +1,53 @@
 import classNames from "classnames";
 import styles from "./Track.module.css";
-import { Track } from "@/app/Utilities/types";
+import { Track } from "@/app/utilities/types";
+import { useAppDispatch, useAppSelector } from "@/app/utilities/hooks";
+import { setCurrentTrack, setIsPlaying } from "@/app/utilities/store/features/playlistSlice";
+import { durationFormat } from "@/app/utilities/durationFormat";
 
-type TrackBoxProps = {
-  currentTrack: Track | null;
-  onClick: () => void
-};
+type TrackType = {
+  track: Track;
+}
+ 
+export default function TrackBox({track}: TrackType) {
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
+  const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
+  const dispatch = useAppDispatch();
+  const { name, author, album, duration_in_seconds, id } = track;
+  const isCurrentTrack = currentTrack ? currentTrack.id === id : false;
 
-export default function TrackBox({ currentTrack, onClick }: TrackBoxProps) {
-  if (!currentTrack) return null;
-  const minutes = Math.floor(currentTrack.duration_in_seconds / 60);
-  const seconds = currentTrack.duration_in_seconds % 60;
-
+  const handleTrackClick = () => {
+    dispatch(setCurrentTrack({ track }));
+    dispatch(setIsPlaying(true));
+  };
   return (
-    <div className={styles.playlistItem} onClick={onClick}>
+    <div className={styles.playlistItem} onClick={handleTrackClick}>
       <div className={styles.playlistTrack}>
         <div className={classNames(styles.trackTitle, styles.title)}>
           <div className={styles.trackTitleImage}>
-            <svg className={styles.trackTitleSvg}>
-              <use xlinkHref="img/icon/sprite.svg#icon-note" />
+          <svg className={classNames(styles.trackTitleSvg, {
+                [styles.trackIconIsplaying]: isPlaying && isCurrentTrack,
+              })}>
+              <use xlinkHref={`img/icon/sprite.svg#${
+                  isCurrentTrack ? "icon-isplaying" : "icon-note"
+                }`} />
             </svg>
           </div>
           <div className={styles.trackTitleText}>
             <a className={styles.trackTitleLink} href="#">
-              {currentTrack.name}
+              {name}
               <span className={styles.trackTitleSpan} />
             </a>
           </div>
         </div>
         <div className={classNames(styles.trackAuthor, styles.author)}>
           <a className={styles.trackAuthorLink} href="#">
-            {currentTrack.author}
+            {author}
           </a>
         </div>
         <div className={classNames(styles.trackAlbum, styles.album)}>
           <a className={styles.trackAlbumLink} href="#">
-            {currentTrack.album}
+            {album}
           </a>
         </div>
         <div className={classNames(styles.trackTime, styles.time)}>
@@ -43,7 +55,7 @@ export default function TrackBox({ currentTrack, onClick }: TrackBoxProps) {
             <use xlinkHref="img/icon/sprite.svg#icon-like" />
           </svg>
           <span className={styles.trackTimeText}>
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+            {durationFormat(duration_in_seconds)}
           </span>
         </div>
       </div>

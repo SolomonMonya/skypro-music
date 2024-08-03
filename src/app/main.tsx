@@ -7,24 +7,16 @@ import Nav from "@/components/Navigation/Navigation";
 import Search from "@/components/Search/Search";
 import Filters from "@/components/Filters/Filters";
 import Playlist from "@/components/Playlist/Playlist";
-import { Track } from "@/app/Utilities/types";
+import { Track } from "@/app/utilities/types";
 import { useState } from "react";
 
 type MainTrackCheck = {
   tracks: Track[];
-  setTracks: (tracks: Track[]) => void;
 };
 
-export default function Main({ tracks, setTracks }: MainTrackCheck) {
+export default function Main({ tracks }: MainTrackCheck) {
   const [filteredTracks, setFilteredTracks] = useState<Track[]>(tracks);
-  const [currentIndex, setCurrentIndex] = useState<number | null>(0);
-  if (currentIndex === null) return
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(tracks[currentIndex]);
 
-  const handleTrackChange = (track: Track | null, index: number | null) => {
-    setCurrentTrack(track);
-    setCurrentIndex(index);
-  };
 
   return (
     <div className={styles.container}>
@@ -36,17 +28,12 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
           <Filters track={tracks} setFilteredTracks={setFilteredTracks} />
           <Playlist
             tracksData={filteredTracks}
-            setCurrentTrack={handleTrackChange}
           />
         </div>
         <Sidebar />
       </main>
       {filteredTracks && (
-        <Bar
-          tracksData={filteredTracks}
-          track={currentTrack}
-          index={currentIndex}
-        />
+        <Bar/>
       )}
       <footer className="footer" />
     </div>
