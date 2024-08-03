@@ -12,7 +12,7 @@ export type Track = {
   name: string;
   author: string;
   album: string;
-  logo: { type: string; data: any[] };
+  logo: string | null;
   track_file: string;
   duration_in_seconds: number;
   genre: string[];
