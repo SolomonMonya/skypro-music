@@ -36,14 +36,15 @@ const playlistSlice = createSlice({
       const playlist = state.isShuffle
         ? state.shuffledPlaylist
         : state.currentPlaylist;
-      const currentTrackIndex = playlist.findIndex(
+      const trackIndex = playlist.findIndex(
         (track) => track.id === state.currentTrack?.id
       );
-      console.log(currentTrackIndex)
+      console.log(trackIndex) // Всегда 0
+      const currentTrackIndex = trackIndex < playlist.length - 1 ? trackIndex + 1 : 0;
 
-      const nextIndex = playlist[currentTrackIndex + 1];
+      const nextIndex = playlist[currentTrackIndex];
       if (nextIndex) {
-        console.log("currentTrackIndex")
+        console.log("currentTrackIndex") // console.log приходит, значит работает
         state.currentTrack = nextIndex;
       }
     },
@@ -51,10 +52,12 @@ const playlistSlice = createSlice({
       const playlist = state.isShuffle
         ? state.shuffledPlaylist
         : state.currentPlaylist;
-      const currentTrackIndex = playlist.findIndex(
+      const trackIndex = playlist.findIndex(
         (track) => track.id === state.currentTrack?.id
       );
-      const prevIndex = playlist[currentTrackIndex - 1];
+      const currentTrackIndex = trackIndex > 0 ? trackIndex - 1 : playlist.length - 1;
+
+      const prevIndex = playlist[currentTrackIndex];
       if (prevIndex) {
         state.currentTrack = prevIndex;
       }

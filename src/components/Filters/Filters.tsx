@@ -64,10 +64,14 @@ export default function Filters({ track, setFilteredTracks }: FilterTracksProps)
 
     if (selectedAuthor) {
       filteredTracks = filteredTracks.filter((t) => t.author === selectedAuthor);
+      dispatch(setCurrentPlaylist(filteredTracks));
+
     }
 
     if (selectedGenre) {
       filteredTracks = filteredTracks.filter((t) => t.genre.includes(selectedGenre));
+      dispatch(setCurrentPlaylist(filteredTracks));
+
     }
 
     if (selectedYear) {
@@ -79,11 +83,10 @@ export default function Filters({ track, setFilteredTracks }: FilterTracksProps)
         } else if (selectedYear === 'сначала старые') {
           return dateA.getTime() - dateB.getTime();
         }
+        dispatch(setCurrentPlaylist(filteredTracks));
         return 0;
       });
     }
-
-    dispatch(setCurrentPlaylist(filteredTracks));
   }
 
   return (
