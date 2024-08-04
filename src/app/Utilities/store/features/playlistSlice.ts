@@ -28,6 +28,8 @@ const playlistSlice = createSlice({
   reducers: {
     setCurrentPlaylist: (state, action: PayloadAction<Track[]>) => {
       state.currentPlaylist = action.payload;
+      console.log(state.currentPlaylist) // console.log приходит, значит работает
+
     },
     setCurrentTrack: (state, action: PayloadAction<Track>) => {
       state.currentTrack = action.payload;
@@ -70,10 +72,7 @@ const playlistSlice = createSlice({
         );
       }
     },
-                  // state.playlist = action.payload.tracksData;
-              // state.shuffledPlaylist = [...action.payload.tracksData].sort(
-              // () => 0.5 - Math.random()
-              // );
+
     setIsPlaying: (state, action: PayloadAction<boolean>) => {
       state.isPlaying = action.payload;
     },
