@@ -5,6 +5,7 @@ import { Track } from "@/app/Utilities/types";
 type TrackBoxProps = {
   currentTrack: Track | null;
   onClick: () => void
+  
 };
 
 export default function TrackBox({ currentTrack, onClick }: TrackBoxProps) {

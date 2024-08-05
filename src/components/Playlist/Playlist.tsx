@@ -6,12 +6,15 @@ import { Track } from "@/app/Utilities/types";
 type TrackType = {
   tracksData: Track[];
   setCurrentTrack: (track: Track | null, index: number | null) => void;
+  setIsPlaying: (isPlaying: boolean) => void;
+
 };
 
-export default function Playlist({ tracksData, setCurrentTrack }: TrackType) {
+export default function Playlist({ tracksData, setCurrentTrack, setIsPlaying }: TrackType) {
   const handleTrackClick = (playlistItem: Track, index: number) => {
     console.log(playlistItem, index)
     setCurrentTrack(playlistItem, index);
+    setIsPlaying(true)
   };
 
   return (

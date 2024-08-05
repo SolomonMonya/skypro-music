@@ -12,11 +12,12 @@ type BarType = {
   tracksData: Track[];
   index: number | null;
   track: Track | null;
+  setIsPlaying: (isPlaying: boolean) => void;
+  isPlaying: boolean
 };
 
-export default function Bar({ tracksData, track, index }: BarType) {
+export default function Bar({ tracksData, track, index, setIsPlaying, isPlaying }: BarType) {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(track);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isLooping, setIsLooping] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [volume, setVolume] = useState<number>(100);
@@ -29,7 +30,9 @@ export default function Bar({ tracksData, track, index }: BarType) {
   }, [track]);
 
   const duration = audioRef.current?.duration || 0;
-
+  if (isPlaying === undefined || isPlaying === null) {
+    return;
+  }
   const togglePlay = () => setIsPlaying(!isPlaying);
   const toggleLoop = () => setIsLooping(!isLooping);
 
@@ -80,12 +83,6 @@ export default function Bar({ tracksData, track, index }: BarType) {
     }
 
   };
-
-  useEffect(() => {
-    if (currentTrack) {
-      setIsPlaying(true)   
-    }
-  }, [track]);
 
   if (!currentTrack) {
     return null;

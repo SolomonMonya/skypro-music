@@ -20,6 +20,7 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
   const [currentIndex, setCurrentIndex] = useState<number | null>(0);
   if (currentIndex === null) return
   const [currentTrack, setCurrentTrack] = useState<Track | null>(tracks[currentIndex]);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const handleTrackChange = (track: Track | null, index: number | null) => {
     setCurrentTrack(track);
@@ -37,6 +38,7 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
           <Playlist
             tracksData={filteredTracks}
             setCurrentTrack={handleTrackChange}
+            setIsPlaying={setIsPlaying}
           />
         </div>
         <Sidebar />
@@ -46,6 +48,8 @@ export default function Main({ tracks, setTracks }: MainTrackCheck) {
           tracksData={filteredTracks}
           track={currentTrack}
           index={currentIndex}
+          setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
         />
       )}
       <footer className="footer" />
