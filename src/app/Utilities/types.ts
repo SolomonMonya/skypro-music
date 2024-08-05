@@ -8,31 +8,16 @@ export type User = {
   email: string;
 };
 export type Track = {
-  id: number;
+  _id: number;
   name: string;
   author: string;
   album: string;
-  logo: { type: string; data: any[] };
+  logo: string | null;
   track_file: string;
   duration_in_seconds: number;
   genre: string[];
   release_date: string;
   staredUser: number[];
-};
-
-export type Tracks = {
-  isLoading?: boolean;
-  setCurrentTrack: (track: any) => void;
-  tracks: Array<{
-    id: number;
-    name: string;
-    author: string;
-    album: string;
-    genre: string;
-    duration_in_seconds: number;
-    isLiked: boolean;
-    track_file: string;
-  }>;
 };
 
 export type SimplifiedTrack = {

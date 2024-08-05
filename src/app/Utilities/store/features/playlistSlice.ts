@@ -39,7 +39,7 @@ const playlistSlice = createSlice({
         ? state.shuffledPlaylist
         : state.currentPlaylist;
       const trackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       console.log(trackIndex) // Всегда 0
       const currentTrackIndex = trackIndex < playlist.length - 1 ? trackIndex + 1 : 0;
@@ -55,7 +55,7 @@ const playlistSlice = createSlice({
         ? state.shuffledPlaylist
         : state.currentPlaylist;
       const trackIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       const currentTrackIndex = trackIndex > 0 ? trackIndex - 1 : playlist.length - 1;
 
