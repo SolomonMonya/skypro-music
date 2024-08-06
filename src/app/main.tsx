@@ -12,10 +12,9 @@ import { useState } from "react";
 
 type MainTrackCheck = {
   tracks: Track[];
-  setTracks: (tracks: Track[]) => void;
 };
 
-export default function Main({ tracks, setTracks }: MainTrackCheck) {
+export default function Main({ tracks }: MainTrackCheck) {
   const [filteredTracks, setFilteredTracks] = useState<Track[]>(tracks);
   const [currentIndex, setCurrentIndex] = useState<number | null>(0);
   if (currentIndex === null) return
