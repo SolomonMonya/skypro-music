@@ -79,7 +79,7 @@ const PlayerBar: React.FC<PlayerControlsType> = ({
           <svg className={styles.playerBtnShuffleSvg}>
             <use
               xlinkHref={`img/icon/sprite.svg#${
-                isShuffle ? "icon-shuffle-toggled" : "icon-shuffle"
+                isShuffle ? "icon-shuffle-active" : "icon-shuffle"
               }`}
             />
           </svg>

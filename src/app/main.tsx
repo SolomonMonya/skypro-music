@@ -9,6 +9,8 @@ import Filters from "@/components/Filters/Filters";
 import Playlist from "@/components/Playlist/Playlist";
 import { Track } from "@/app/utilities/types";
 import { useState } from "react";
+import { useAppDispatch } from "./utilities/hooks";
+import { setCurrentPlaylist } from "./utilities/store/features/playlistSlice";
 
 type MainTrackCheck = {
   tracks: Track[];
@@ -16,8 +18,9 @@ type MainTrackCheck = {
 
 export default function Main({ tracks }: MainTrackCheck) {
   const [filteredTracks, setFilteredTracks] = useState<Track[]>(tracks);
-
-
+  const dispatch = useAppDispatch();
+  dispatch(setCurrentPlaylist(tracks));
+  
   return (
     <div className={styles.container}>
       <main className={styles.main}>
